@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Input, message } from 'antd';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
-import iconAdd from '../../assets/referral/icon_add.png';
-import iconDel from '../../assets/referral/icon_del.png';
+import iconAdd from '../../assets/referral/icon_add.svg';
+import iconDel from '../../assets/referral/icon_del.svg';
 import styles from './index.less';
 
 let tempList;
@@ -14,7 +14,7 @@ class ZZMultiInput extends Component {
     tempList = ZZMultiInput.init(props);
     this.state = {
       list: tempList,
-      currentFocusIdx: 0,
+      currentFocusIdx: -1,
     };
   }
 
@@ -38,38 +38,36 @@ class ZZMultiInput extends Component {
 
   onAdd = (index) => {
     const { maxCount, onChange } = this.props;
-    const list = tempList;
-    if (list.length < maxCount) {
-      list.splice(index + 1, 0, ' ');
-      this.setState({ list });
-      onChange?.(list.map((item) => item.trim()));
+    if (tempList.length < maxCount) {
+      tempList.splice(index + 1, 0, ' ');
+      this.setState({
+        currentFocusIdx: index + 1,
+      });
+      onChange?.(tempList.map((item) => item.trim()));
     } else {
-      message.info(`最多添加${this.props.maxCount}个`);
+      message.info(`最多添加${maxCount}个`);
     }
-    this.setState({
-      currentFocusIdx: index + 1,
-    });
   };
 
   onDel = (index) => {
-    const { onChange } = this.props;
-    const list = tempList;
-    if (list.length > 1) {
-      list.splice(index, 1);
-      this.setState({ list });
-      onChange?.(list.map((item) => item.trim()));
+    const { onChange, onValidate } = this.props;
+    if (tempList.length > 1) {
+      tempList.splice(index, 1);
+      this.setState({
+        currentFocusIdx: index - 1,
+      });
+      onChange?.(tempList.map((item) => item.trim()));
+      onValidate?.(tempList.map((item) => item.trim()));
     } else {
       message.info(`至少保留一个`);
     }
-    this.setState({
-      currentFocusIdx: index - 1,
-    });
   };
 
   onChange = debounce((e, index) => {
-    const { onChange } = this.props;
+    const { onChange, onValidate } = this.props;
     tempList.splice(index, 1, e.target.value);
     onChange?.(tempList.map((item) => item.trim()));
+    onValidate?.(tempList.map((item) => item.trim()));
     this.setState({
       currentFocusIdx: index,
     });
@@ -89,7 +87,7 @@ class ZZMultiInput extends Component {
               <Input
                 {...inputComponentProps}
                 className={styles.input}
-                defaultValue={value}
+                defaultValue={value.trim()}
                 onChange={(e) => {
                   this.onChange(e, index);
                 }}
@@ -122,10 +120,10 @@ ZZMultiInput.propTypes = {
   defaultCount: PropTypes.number,
   maxCount: PropTypes.number,
   inputComponentProps: PropTypes.object,
-  // 在AntDesign表单中使用时自动绑定
+  // 以下在AntDesign表单中使用时自动添加
   value: PropTypes.array,
-  // 用于在非表单中获取值
   onChange: PropTypes.func,
+  onValidate: PropTypes.func,
 };
 ZZMultiInput.defaultProps = {
   defaultCount: 1,
@@ -133,5 +131,6 @@ ZZMultiInput.defaultProps = {
   inputComponentProps: {},
   value: [],
   onChange: () => {},
+  onValidate: () => {},
 };
 export default ZZMultiInput;

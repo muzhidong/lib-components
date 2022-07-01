@@ -33,20 +33,33 @@ class ZZQiniuUpload extends Component {
     const [media = '', format = ''] = type.split('/');
     let result = false;
     accept.split(',').forEach((item) => {
-      if (item === type) result = true;
-      if (item.indexOf('.') === 0 && item.slice(1) === format) result = true;
-      if (item === `${media}/*`) result = true;
+      if (
+        item === type ||
+        (item.indexOf('.') === 0 && item.slice(1) === format) ||
+        item === `${media}/*`
+      )
+        result = true;
     });
     return result;
   }
 
   beforeUpload = (file, fileList) => {
-    const { fileMaxSize, maxCount } = this.props;
+    const { fileMaxSize, maxCount, exceedFileSizeTip, unMatchedFileTypeTip } = this.props;
     const { size, uid, type } = file;
 
-    if (!this.isInTypes(type)) return false;
+    if (!this.isInTypes(type)) {
+      if (unMatchedFileTypeTip) {
+        message.warn(unMatchedFileTypeTip);
+      }
+      return false;
+    }
 
-    if (fileMaxSize !== -1 && size > fileMaxSize) return false;
+    if (fileMaxSize !== -1 && size > fileMaxSize) {
+      if (exceedFileSizeTip) {
+        message.warn(exceedFileSizeTip);
+      }
+      return false;
+    }
 
     const idx = fileList
       .filter((item) => item.size <= fileMaxSize)
@@ -56,7 +69,7 @@ class ZZQiniuUpload extends Component {
   };
 
   getQiniuToken = async () => {
-    const qiniu = getStorage('qiniu');
+    const qiniu = getStorage('qiniuToken');
     if (qiniu && new Date().getTime() <= qiniu.expireTime && qiniu.token) {
       return Promise.resolve(qiniu.token);
     }
@@ -65,7 +78,7 @@ class ZZQiniuUpload extends Component {
       data: { token, expires },
     } = await getQiniuUploadToken();
 
-    setStorage('qiniu', {
+    setStorage('qiniuToken', {
       token,
       expireTime: new Date().getTime() + expires * 1000 - buffer,
     });
@@ -152,6 +165,10 @@ ZZQiniuUpload.propTypes = {
   onFileListChange: PropTypes.func,
   // 文件大小限制
   fileMaxSize: PropTypes.number,
+  // 超出文件大小提示
+  exceedFileSizeTip: PropTypes.string,
+  // 文件类型不匹配提示
+  unMatchedFileTypeTip: PropTypes.string,
   // 以下均是AntDesign Upload组件提供的属性
   accept: PropTypes.string,
   listType: PropTypes.string,
@@ -169,10 +186,12 @@ ZZQiniuUpload.propTypes = {
 ZZQiniuUpload.defaultProps = {
   onFileListChange: () => {},
   fileMaxSize: -1,
+  exceedFileSizeTip: '',
+  unMatchedFileTypeTip: '',
   accept: 'image/*',
   listType: 'picture-card',
   multiple: true,
-  maxCount: 6,
+  maxCount: 1,
   showUploadList: true,
   defaultFileList: [],
 };

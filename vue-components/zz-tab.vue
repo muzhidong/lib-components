@@ -15,7 +15,9 @@
       :scroll-x="true"
       :scroll-y="false"
       :enable-flex="true" 
-      :scroll-into-view="currentId" 
+      :scroll-into-view="currentId"
+      :show-scrollbar="false"
+      :enhanced="true"
       class="scroll flex-start-center">
       <view v-for="(item, index) in renderItems" 
         :key="item.id"
@@ -76,6 +78,14 @@ export default {
   },
   watch:{
     items(){
+      this.setMode();
+    }
+  },
+  mounted(){
+    this.setMode();
+  },
+  methods:{
+    setMode(){
       setTimeout(()=>{
         // 内部控制采用合适的模式
         if(this.createSelectorQuery){
@@ -96,9 +106,7 @@ export default {
             });
         }
       })
-    }
-  },
-  methods:{
+    },
     onTab(item, index){
       if(this.currentIdx === index) return;
       this.currentIdx = index;

@@ -22,16 +22,17 @@ export default {
       type: String,
       default: ''
     },
-    // 绘制内容，目前暂只支持绘制图片类型，后续根据需求做扩展。数组元素格式如下，
-    // {
-    //   type: 'image',
-    //   top: 0,
-    //   left: 0,
-    //   src: '图片网络或本地路径',
-    //   isBackground: true,
-    // }
+    // 绘制内容
     content:{
       type: Array,
+      // 目前暂只支持绘制图片类型，后续根据需求做扩展。数组元素格式如下，
+      // {
+      //   type: 'image',
+      //   top: 0,
+      //   left: 0,
+      //   src: '图片网络或本地路径',
+      //   isBackground: true,
+      // }
       default:[],
     },
     // 外部调用合成方法时loading配置

@@ -15,9 +15,7 @@
       :vertical="vertical"
       :style="[containerStyle]"
       @change="onChange">
-        <swiper-item v-for="(item,index) in list" 
-          :key="index"
-          :style="[itemStyle]">
+        <swiper-item v-for="(item,index) in list" :key="index">
           <slot :data="item" :isCurrent="index === currentIdx">
             <view>{{index}}</view>
           </slot>
@@ -88,16 +86,15 @@ export default {
         return {}
       }
     },
-    itemStyle:{
-      type: Object,
-      default(){
-        return {}
-      }
-    }
   },
   data(){
     return {
-      currentIdx: -1,
+      currentIdx: 0,
+    }
+  },
+  watch:{
+    current(value){
+      this.currentIdx = value;
     }
   },
   mounted(){
