@@ -18,7 +18,6 @@
       <view
         v-for="(item, index) in renderItems"
         :key="item.sId"
-        :id="item.sId"
         :class="[
           'item',
           { active: currentIdx === index, line2: language !== 'CN' }
@@ -55,7 +54,6 @@ export default {
   data() {
     return {
       currentIdx: 0,
-      currentId: '',
       iconShadow: imagesConfig.icon_shadow,
       showGradient: false,
       scrollLeft: 0
@@ -134,22 +132,23 @@ export default {
     // 滚动到选中的Tab
     scrollToSelectedTab(idx) {
       this.currentIdx = idx;
+
       if (!this.showGradient || !widthArr) return;
+
       if (idx === 0) {
-        // 第一个不必偏移
         this.scrollLeft = 0;
       } else {
-        const offset = widthArr.slice(0, idx).reduce((total, item) => {
-          return total + +item;
+        // 偏移量
+        const offset = widthArr.slice(0, idx).reduce((total, item, index) => {
+          return total + +item * (idx === index ? 1.14 : 1) + 25;
         }, 0);
-        if (offset >= maxOffset) {
-          // 超过最大偏移量取最大偏移量
-          this.scrollLeft = maxOffset;
-        } else {
-          // 不到最大偏移量，偏移后居中显示
-          const rest = (systemInfo.windowWidth - 30 - (widthArr[idx] + 25)) / 2;
-          this.scrollLeft = offset - rest;
-        }
+        // 居中显示要减少的偏移量
+        const rest =
+          (systemInfo.windowWidth - 30 - (widthArr[idx] * 1.14 + 25)) / 2;
+        this.scrollLeft = Math.min(
+          Math.max(offset - rest, 0),
+          maxOffset + widthArr[widthArr.length - 1] * 0.14
+        );
       }
     }
   }
@@ -159,7 +158,7 @@ export default {
 <style lang="less" scoped>
 .container {
   width: 100%;
-  height: 145rpx;
+  height: 130rpx;
   background: #00a0b5;
   overflow: hidden;
   position: relative;
@@ -171,14 +170,15 @@ export default {
     transform: translateY(-50%);
     width: 22rpx;
     height: 72rpx;
-    z-index: 0;
+    z-index: 10;
   }
 
   .wrapper {
     width: fit-content;
     height: 100%;
-    padding: 45rpx 30rpx 0;
+    padding: 29rpx 30rpx 0;
     box-sizing: border-box;
+    overflow-anchor: visible;
     &.auto {
       width: auto;
     }
@@ -214,7 +214,6 @@ export default {
       }
 
       &.line2 {
-        // 310
         min-width: 260rpx;
         text-align: center;
         line-height: 1;
@@ -224,7 +223,6 @@ export default {
         -webkit-line-clamp: 2;
         overflow: hidden;
         &.active {
-          // 380
           min-width: 320rpx;
         }
       }

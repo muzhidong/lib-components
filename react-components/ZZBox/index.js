@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, InputNumber } from 'antd';
+import { Form, Input, InputNumber, TimePicker, Radio, Row, Col } from 'antd';
 import styles from './index.less';
 
 const { TextArea } = Input;
@@ -29,6 +29,24 @@ class ZZBox extends Component {
     return (
       <Form.Item {...basicProps}>
         <InputNumber {...componentProps} />
+      </Form.Item>
+    );
+  };
+
+  renderTimePicker = (tplConfig) => {
+    const { componentProps, basicProps } = tplConfig;
+    return (
+      <Form.Item {...basicProps}>
+        <TimePicker {...componentProps} />
+      </Form.Item>
+    );
+  };
+
+  renderRadio = (tplConfig) => {
+    const { componentProps, basicProps } = tplConfig;
+    return (
+      <Form.Item {...basicProps}>
+        <Radio.Group {...componentProps} />
       </Form.Item>
     );
   };
@@ -63,38 +81,70 @@ class ZZBox extends Component {
       case 'inputNumber':
         item = this.renderInputNumber(tplCfg);
         break;
+      case 'timePicker':
+        item = this.renderTimePicker(tplCfg);
+        break;
       case 'textarea':
         item = this.renderTextArea(tplCfg);
+        break;
+      case 'radio':
+        item = this.renderRadio(tplCfg);
         break;
       default:
         item = this.renderText(tplCfg);
         break;
     }
     return (
-      <div key={i} className={styles.item} style={tplCfg.wrapperStyle}>
+      <Col key={i} className={styles.item} style={tplCfg.wrapperStyle} {...(tplCfg.col ?? {})}>
         {item}
-      </div>
+      </Col>
     );
   };
 
   render() {
-    const { title, templates } = this.props;
+    const { title, containerStyle, templates } = this.props;
 
     return (
-      <div className={styles.container}>
+      <div className={styles.container} style={containerStyle}>
         <div className={styles.header}>{title}</div>
-        <div className={styles.main}>
+        <Row className={styles.main}>
           {templates &&
             templates.map((tplConfig, i) => {
               return this.renderItem(tplConfig, i);
             })}
-        </div>
+        </Row>
       </div>
     );
   }
 }
+/**
+ * 简单示例：
+ * <ZZBox
+ *   title="APP账号信息"
+ *   templates={[
+      {
+        tplType: 'text',
+        componentProps: {
+          value: '',
+        },
+        basicProps: {
+          name: 'appUserDescription',
+          label: 'APP账号',
+        },
+      },
+    ]}
+  />
+ */
 ZZBox.propTypes = {
+  // 块区域的标题
   title: PropTypes.string,
+  // 块区域的容器自定义样式
+  containerStyle: PropTypes.object,
+  // 块区域的模板数据，是一个数组，每个元素是一个由以下4个属性组成的对象，
+  // 模板被包裹的样式wrapperStyle
+  // 模板类型tplType（使用什么组件）
+  // 基础属性basicProps
+  // 组件属性componentProps
   templates: PropTypes.arrayOf(
     PropTypes.shape({
       wrapperStyle: PropTypes.object,
@@ -106,6 +156,7 @@ ZZBox.propTypes = {
 };
 ZZBox.defaultProps = {
   title: '标题',
+  containerStyle: {},
   templates: [],
 };
 export default ZZBox;

@@ -10,13 +10,14 @@ import { getQiniuUploadToken } from '@/api/referral';
 import styles from './index.less';
 
 const qiniuUploadUrl = 'https://upload.qiniup.com';
-const cdn = 'https://crm-storage.distinctclinic.com';
+const defaultCDN = 'https://crm-storage.distinctclinic.com';
 // 设置客、服两端缓冲时间
 const buffer = 2000;
 
 class ZZQiniuUpload extends Component {
   constructor(props) {
     super();
+
     this.state = {
       currentFileList: props.defaultFileList,
     };
@@ -76,7 +77,7 @@ class ZZQiniuUpload extends Component {
 
     const {
       data: { token, expires },
-    } = await getQiniuUploadToken();
+    } = await this.props.getQiNiuTokenFunc();
 
     setStorage('qiniuToken', {
       token,
@@ -100,6 +101,7 @@ class ZZQiniuUpload extends Component {
     })
       .then((res) => {
         const { currentFileList } = this.state;
+        const { cdn } = this.props;
         currentFileList.push({
           uid: e.file.uid,
           url: `${cdn}/${res.key}`,
@@ -181,6 +183,10 @@ ZZQiniuUpload.propTypes = {
       url: PropTypes.string,
     }),
   ),
+  // 获取七牛token的方法
+  getQiNiuTokenFunc: PropTypes.func,
+  // 图片域名地址
+  cdn: PropTypes.string,
 };
 
 ZZQiniuUpload.defaultProps = {
@@ -194,6 +200,8 @@ ZZQiniuUpload.defaultProps = {
   maxCount: 1,
   showUploadList: true,
   defaultFileList: [],
+  getQiNiuTokenFunc: getQiniuUploadToken,
+  cdn: defaultCDN,
 };
 
 export default ZZQiniuUpload;

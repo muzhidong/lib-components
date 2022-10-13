@@ -7,6 +7,12 @@
   }
 }
 
+.title {
+  color: #40a9ff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
 .steps-container {
   width: 60%;
   margin: auto;
@@ -17,6 +23,13 @@
   height: 100%;
   padding-top: 30px;
   padding-bottom: 60px;
+  .wrapper {
+    height: 100%;
+    overflow: hidden scroll;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
 }
 
 .footer {

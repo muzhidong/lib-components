@@ -5,8 +5,8 @@ export default StyleSheet.create({
   tabContainer: {
     position: 'relative',
     width: '100%',
-    height: 72.5,
-    paddingTop: 22.5,
+    height: 65,
+    paddingTop: 14.5,
     paddingHorizontal: 15,
     backgroundColor: '#00A0B5'
   },
@@ -24,7 +24,7 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    color: 'rgba(255,255,255,0.7)',
+    color: appStyles.color.white,
     fontSize: 14
   },
   space: {
@@ -33,7 +33,7 @@ export default StyleSheet.create({
   active: {
     paddingBottom: 5,
     fontWeight: 'bold',
-    fontSize: appStyles.color.big
+    fontSize: appStyles.fontSize.big
   },
   underline: {
     width: 32.5,

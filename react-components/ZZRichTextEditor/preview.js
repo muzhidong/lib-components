@@ -47,7 +47,12 @@ export const getPreviewHtml = (editor) => {
 
   const contentStyle = getContentStyle(editor);
   if (contentStyle) {
-    headHtml += `<style type="text/css">${contentStyle}</style>`;
+    headHtml += `<style type="text/css">
+      ${contentStyle}
+      p{ margin: 0 auto; }
+      body::-webkit-scrollbar { width: 3px; background-color:#f1f1f1; }
+      body::-webkit-scrollbar-thumb { background-color:#c1c1c1; }
+    </style>`;
   }
 
   const bodyId = getBodyId(editor);

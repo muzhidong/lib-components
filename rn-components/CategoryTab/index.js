@@ -6,18 +6,22 @@ import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
 import screenUtils from 'app/utils/screenUtils';
 import ImagesConfig from 'app/config/ImagesConfig';
+import appStyles from 'app/styles/appStyles';
 import styles from './styles';
-// TODO:宽度不大于页宽去阴影；选中Tab滚动距离有偏差
+
 class CategoryTab extends Component {
   static isFromInner = false;
 
   scrollViewRef = null;
 
+  itemWidthArr = [];
+
+  initFlag = true;
+
   constructor(props) {
     super(props);
     this.state = {
-      selectedIdx: 0,
-      showGradient: false
+      selectedIdx: 0
     };
   }
 
@@ -31,12 +35,12 @@ class CategoryTab extends Component {
     return null;
   }
 
-  onScrollViewLayout = e => {
+  onLayout = (e, index) => {
     const w = e.nativeEvent.layout.width;
-    if (w >= screenUtils.ScreenWidth - 30) {
-      this.setState({
-        showGradient: true
-      });
+    this.itemWidthArr[index] = this.state.selectedIdx === index ? w - 8 : w;
+    if (this.initFlag && this.itemWidthArr.filter(i => !!i).length === this.props.tabs.length) {
+      this.scroll(this.state.selectedIdx);
+      this.initFlag = false;
     }
   }
 
@@ -47,8 +51,14 @@ class CategoryTab extends Component {
     }, () => {
       this.props.onChange({ ...tab, idx });
     });
+    this.scroll(idx);
+  }
+
+  scroll = idx => {
+    let offset = this.itemWidthArr.slice(0, idx).reduce((total, item) => total + item, 0);
+    offset -= ((screenUtils.ScreenWidth - 30) - (this.itemWidthArr[idx] + 8)) / 3;
     this.scrollViewRef.scrollTo({
-      x: ((screenUtils.ScreenWidth - 30) / 5) * idx,
+      x: offset,
       y: 0,
       animated: true
     });
@@ -59,27 +69,25 @@ class CategoryTab extends Component {
       tabs
     } = this.props;
     const {
-      selectedIdx,
-      showGradient
+      selectedIdx
     } = this.state;
     return (
       <View style={styles.tabContainer}>
-        {showGradient && (
-          <Image style={styles.shadow} source={ImagesConfig.shadow} />
-        )}
+        <Image style={styles.shadow} source={ImagesConfig.shadow} />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           ref={ref => { this.scrollViewRef = ref; }}
-          onLayout={this.onScrollViewLayout}
         >
           {tabs.map((tab, index) => (
             <TouchableOpacity
               key={tab.id}
               onPress={() => { this.onChange(tab, index); }}
+              activeOpacity={appStyles.activeOpacity.normal}
             >
               <View
                 style={[styles.tab, tabs.length - 1 !== index && styles.space]}
+                onLayout={e => { this.onLayout(e, index); }}
               >
                 <Text style={[styles.text, selectedIdx === index && styles.active]}>{tab.name}</Text>
                 {selectedIdx === index && (

@@ -351,8 +351,25 @@ export default function ZZRichTextEditor(props) {
     },
 
     // 自定义富文本初始化样式
-    content_style:
-      'body{ width: 750px; padding: 0; margin: auto; overflow-x: hidden; word-break: break-all; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;}',
+    content_style: `
+      body {
+        width: 750px;
+        padding: 0;
+        margin: auto;
+        overflow-x: hidden;
+        word-break: break-all;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+      }
+      img {
+        max-width: 100% !important;
+      }
+      table {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+    `,
 
     // external_plugins: '',
     setup(editor) {
@@ -380,7 +397,8 @@ export default function ZZRichTextEditor(props) {
   };
 
   const onEditorChange = throttle((richText) => {
-    props.onEditorChange(richText);
+    const style = `<style>img{max-width:100% !important;}table{max-width:100% !important;width:100% !important;}p{margin:0 auto;}</style>`;
+    props.onEditorChange(`${richText}${style}`);
   }, 3000);
 
   return (
