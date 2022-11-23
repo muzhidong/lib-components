@@ -182,31 +182,33 @@ export default {
           }
         }
 
-        this.canvasContext.draw(false, setTimeout(()=>{
-          wx.canvasToTempFilePath({
-            width: this.width,
-            height: this.height,
-            x: 0,
-            y: 0,
-            fileType: this.imageType,
-            canvasId: this.canvasId,
-            success:(res)=>{
-              this.loading.show && wx.hideLoading({
-                noConflict: true,
-              });
-              this.addImageCache(composePicId, res.tempFilePath, IMAGE_TYPE.COMPOSE);
-              success && success(res.tempFilePath);
-              resolve(res.tempFilePath);
-            },
-            fail:(err)=>{
-              this.loading.show && wx.hideLoading({
-                noConflict: true,
-              });
-              fail && fail(err);
-              reject(err);
-            },
-          }, this)  
-        }, 500))
+        this.canvasContext.draw(false, ()=>{
+          setTimeout(()=>{
+            wx.canvasToTempFilePath({
+              width: this.width,
+              height: this.height,
+              x: 0,
+              y: 0,
+              fileType: this.imageType,
+              canvasId: this.canvasId,
+              success:(res)=>{
+                this.loading.show && wx.hideLoading({
+                  noConflict: true,
+                });
+                this.addImageCache(composePicId, res.tempFilePath, IMAGE_TYPE.COMPOSE);
+                success && success(res.tempFilePath);
+                resolve(res.tempFilePath);
+              },
+              fail:(err)=>{
+                this.loading.show && wx.hideLoading({
+                  noConflict: true,
+                });
+                fail && fail(err);
+                reject(err);
+              },
+            }, this)  
+          }, 500))
+         }
       })
     },
 
