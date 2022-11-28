@@ -182,8 +182,8 @@ export default {
           }
         }
 
-        this.canvasContext.draw(false, ()=>{
-          setTimeout(()=>{
+        this.canvasContext.draw(false, () => {
+          setTimeout(() => {
             wx.canvasToTempFilePath({
               width: this.width,
               height: this.height,
@@ -191,7 +191,7 @@ export default {
               y: 0,
               fileType: this.imageType,
               canvasId: this.canvasId,
-              success:(res)=>{
+              success: (res) => {
                 this.loading.show && wx.hideLoading({
                   noConflict: true,
                 });
@@ -199,16 +199,16 @@ export default {
                 success && success(res.tempFilePath);
                 resolve(res.tempFilePath);
               },
-              fail:(err)=>{
+              fail: (err) => {
                 this.loading.show && wx.hideLoading({
                   noConflict: true,
                 });
                 fail && fail(err);
                 reject(err);
               },
-            }, this)  
-          }, 500))
-         }
+            }, this)
+          }, 500)
+        })
       })
     },
 

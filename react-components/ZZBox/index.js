@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, InputNumber, TimePicker, Radio, Row, Col } from 'antd';
+import { Form, Input, InputNumber, TimePicker, Radio, Row, Col, Select } from 'antd';
 import styles from './index.less';
 
 const { TextArea } = Input;
 
 class ZZBox extends Component {
+  constructor() {
+    super();
+    this.state = {
+      currentSelectedValue: {},
+    };
+  }
+
   renderText = (tplConfig) => {
     const { componentProps, basicProps } = tplConfig;
     return (
@@ -51,6 +58,32 @@ class ZZBox extends Component {
     );
   };
 
+  onSelectChange = (componentProps, value, option) => {
+    componentProps?.onChange?.(value, option);
+    if (componentProps.renderSuffix) {
+      this.setState({
+        currentSelectedValue: value,
+      });
+    }
+  };
+
+  renderSelect = (tplConfig) => {
+    const { componentProps, basicProps } = tplConfig;
+    return (
+      <>
+        <Form.Item {...basicProps}>
+          <Select
+            {...componentProps}
+            onChange={(value, option) => {
+              this.onSelectChange(componentProps, value, option);
+            }}
+          />
+        </Form.Item>
+        {componentProps?.renderSuffix?.(this.state.currentSelectedValue)}
+      </>
+    );
+  };
+
   renderTextArea = (tplConfig) => {
     const { componentProps, basicProps } = tplConfig;
     return (
@@ -89,6 +122,9 @@ class ZZBox extends Component {
         break;
       case 'radio':
         item = this.renderRadio(tplCfg);
+        break;
+      case 'select':
+        item = this.renderSelect(tplCfg);
         break;
       default:
         item = this.renderText(tplCfg);
