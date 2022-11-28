@@ -108,7 +108,8 @@ export default {
       }
     },
 
-    handleImage(src, successCb){
+    handleImage(src, successCb) {
+      if (!src) return;
       const cache = this.getImageCache(src);
       if(cache){
         successCb && successCb(cache.value);
@@ -118,7 +119,7 @@ export default {
       this.cacheImage(src, successCb)
     },
 
-    cacheImage(src, successCb, retry = true){
+    cacheImage(src, successCb, retry = true) {
       wx.getImageInfo({
         src,
       }).then((res)=>{
@@ -224,6 +225,7 @@ export default {
         dWidth,
         dHeight,
       } = item;
+      if (!imageRes) return;
       if(!dWidth) dWidth = sWidth;
       if(!dHeight) dHeight = sHeight;
       this.canvasContext.save();
