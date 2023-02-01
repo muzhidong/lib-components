@@ -19,7 +19,7 @@
 - 图片组件ReactImage
 
 ### 编辑器类
-- 富文本编辑器组件ReactRichTextEditor
+- 基于TinyMCE富文本编辑器组件ReactRichTextEditor
 
 ### 图表类
 - 基于ECharts图表组件ReactEChart
@@ -29,7 +29,7 @@
 - 自动聚焦Tab组件ReactNativeTab
 
 ## uni版
-### 常用交互类
+### 交互类
 - 轮播组件uni-swiper
 - Tab组件uni-tab
 - 自动聚焦Tab组件uni-auto-focus-tab
