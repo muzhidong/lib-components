@@ -1,31 +1,46 @@
-# 组件库项目设计
-## 组成要素
-- 文档（包括示例，具体展现方式(网站、小程序)视项目而定）
-- 测试
-- 源码 
-- 按需引入
-- 跨端使用（借助一些工具实现，如webpack、gulp？）
+# 组件仓库
 
-## 微众银行vue3 PC组件库
-```
-- components
--- AComponent
----- __tests__
----- style
----- index.ts
----- AComponent.tsx
--- index.ts
--- style.ts
-- docs
-- scripts
-- README.md
-- ... [配置文件]
-```
+目前提供以下组件，
+## react版
+### 容器类
+- 块组件ReactBox
+- 分页滑屏组件ReactPagingSlidingScreen
+- 缓存组件ReactKeepAlive
 
-其中，采用ts+vue3开发，测试使用功能jest，文档使用vitepress，包管理使用pnpm
+### 弹窗类
+- 支持表单配置的弹窗组件ReactModal
+- 支持步进的大弹窗组件ReactLargeStepModal
 
-## AntDesign
+### 表单类
+- 多值输入组件ReactMultiInput
+- 七牛上传组件ReactUpload
 
-## Element
+### 图片类
+- 图片组件ReactImage
 
-## Vant
+### 编辑器类
+- 富文本编辑器组件ReactRichTextEditor
+
+### 图表类
+- 基于ECharts图表组件ReactEChart
+- 饼组件ReactPie
+
+## react-native版
+- 自动聚焦Tab组件ReactNativeTab
+
+## uni版
+### 常用交互类
+- 轮播组件uni-swiper
+- Tab组件uni-tab
+- 自动聚焦Tab组件uni-auto-focus-tab
+
+### 容器类
+- 面板组件uni-panel
+
+### 表单类
+- 单元组件uni-cell
+
+### 工具类
+- 画布转图片组件uni-canvas2image
+
+
