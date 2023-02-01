@@ -23,7 +23,7 @@
 
 ### 图表类
 - 基于ECharts图表组件ReactEChart
-- 饼组件ReactPie
+- 饼图组件ReactPie
 
 ## react-native版
 - 自动聚焦Tab组件ReactNativeTab
