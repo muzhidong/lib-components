@@ -1,0 +1,34 @@
+@size: 143.5px;
+
+.container {
+  position: relative;
+  width: @size;
+  height: @size;
+  border-radius: 50%;
+}
+
+.common {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: @size;
+  height: @size;
+  border-width: @size / 2 * .46;
+  border-style: solid;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.left {
+  .common;
+  border-bottom-color: transparent !important;
+  border-right-color: transparent !important;
+  z-index: 10;
+}
+
+.right {
+  .common;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  transform: rotate(-45deg);
+}
