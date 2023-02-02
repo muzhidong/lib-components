@@ -10,7 +10,7 @@
         <image
           @tap.stop="onCancel"
           class="btn-close"
-          src="@/static/close_icon.png"
+          src="./close_icon.png"
         ></image>
       </block>
       <view class="alert-box__title">

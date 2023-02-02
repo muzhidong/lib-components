@@ -53,9 +53,18 @@
 </template>
 
 <script>
-import {
-  throttle
-} from '@/utils/tool/function';
+const throttle = function(fn, delay = 50) {
+  let timer;
+  return function(...rest) {
+    if (!timer) {
+      timer = setTimeout(function() {
+        fn.call(this, ...rest);
+        timer = null;
+      }, delay);
+    }
+  }
+}
+
 export default {
   props:{
     field:{
