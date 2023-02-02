@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {
-  TouchableOpacity, ScrollView, Text, View, Image
+  TouchableOpacity, ScrollView, Text, View, Image, 
+  Dimensions
 } from 'react-native';
 import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
-import screenUtils from 'app/utils/screenUtils';
-import ImagesConfig from 'app/config/ImagesConfig';
-import appStyles from 'app/styles/appStyles';
+
 import styles from './styles';
+
+const ScreenWidth = Dimensions.get('window').width;
 
 class CategoryTab extends Component {
   static isFromInner = false;
@@ -73,7 +74,7 @@ class CategoryTab extends Component {
     } = this.state;
     return (
       <View style={styles.tabContainer}>
-        <Image style={styles.shadow} source={ImagesConfig.shadow} />
+        <Image style={styles.shadow} source={require('./shadow.png')} />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -83,7 +84,7 @@ class CategoryTab extends Component {
             <TouchableOpacity
               key={tab.id}
               onPress={() => { this.onChange(tab, index); }}
-              activeOpacity={appStyles.activeOpacity.normal}
+              activeOpacity={0.8}
             >
               <View
                 style={[styles.tab, tabs.length - 1 !== index && styles.space]}
