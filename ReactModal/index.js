@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Button, Form, Modal, DatePicker, Input, Radio, Upload } from 'antd';
 import PropTypes from 'prop-types';
-// TODO:优化项，不依赖lodash
-import { isFunction } from 'lodash-es';
 import styles from './index.less';
 
 const { TextArea } = Input;
+
+const isFunction = function(target){
+  return toString.call(target) === "[object Function]"
+}
 
 /**
  *  表单弹框，通过模板数据创建表单
