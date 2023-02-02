@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
 import { Input, message } from 'antd';
 import PropTypes from 'prop-types';
-// TODO:优化项，不依赖lodash
-import { debounce } from 'lodash';
-// TODO:图片资源
-import iconAdd from '../../assets/referral/icon_add.svg';
-import iconDel from '../../assets/referral/icon_del.svg';
+
+// TODO:引入时需自行补充图片资源
+import iconAdd from './icon_add.svg';
+import iconDel from './icon_del.svg';
+
 import styles from './index.less';
+
+const debounce = function(fn, delay = 50, immediate = false) {
+  let timer;
+  return function(...rest) {
+    if (timer) clearTimeout(timer);
+
+    if (immediate) {
+      let isCalledNow = !timer;
+      timer = setTimeout(function() {
+        timer = null;
+      }, delay)
+      if (isCalledNow) fn.call(this, ...rest);
+
+    } else {
+      timer = setTimeout(() => {
+        fn.call(this, ...rest);
+        timer = null;
+      }, delay)
+
+    }
+  }
+}
 
 let tempList;
 
