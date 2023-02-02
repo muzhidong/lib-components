@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import * as echarts from 'echarts';
-// TODO:优化项，不依赖lodash
-import { isEmpty } from 'lodash-es';
 import PropTypes from 'prop-types';
+
+const isEmpty = function(target){
+  if(toString.call(target) !== "[object Object]") return true;
+  if(Object.getOwnPropertyNames(target).length === 0) return true;
+  return false;
+}
 
 class ReactECharts extends Component {
   constructor() {
