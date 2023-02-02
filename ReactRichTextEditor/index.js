@@ -3,12 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Spin, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
-// TODO:优化项，不依赖lodash
-import { throttle } from 'lodash-es';
 
 import ZZModal from '../ZZModal';
-// TODO:优化项，抽取为属性，对外暴露
-import { upload } from '@/api/faq';
 
 import {
   initialTemplate,
@@ -21,6 +17,18 @@ import { displayTypeEnum, openTypeEnum } from './enum';
 import { getPreviewHtml } from './preview';
 import styles from './index.less';
 
+const throttle = function(fn, delay = 50) {
+  let timer;
+  return function(...rest) {
+    if (!timer) {
+      timer = setTimeout(function() {
+        fn.call(this, ...rest);
+        timer = null;
+      }, delay);
+    }
+  }
+}
+
 // 富文本编辑器对象
 let mceEditor;
 // 小程序信息模板
@@ -28,6 +36,12 @@ let appletInfoTpl;
 // 表单模板缓存对象
 let formTplTemp;
 
+/**
+ * 组件属性
+ * initialRichText：富文本初始数据
+ * onEditorChange：富文本内容变化回调，第一个参数是变化后的富文本数据
+ * upload：富文本编辑器图片上传处理函数，支持传递Blob类型参数，返回Promise对象，正常结果返回格式为{data:{url}}，错误则返回Error对象
+ */ 
 export default function ZZRichTextEditor(props) {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,7 +52,7 @@ export default function ZZRichTextEditor(props) {
     ...uploadDisplayContent.componentProps,
     customRequest: (e) => {
       // console.log(e);
-      upload(e.file)
+      props.upload(e.file)
         .then((res) => {
           setUploadPicSrc(res.data.url);
 
@@ -342,7 +356,7 @@ export default function ZZRichTextEditor(props) {
     // 图片上传回调
     images_upload_handler: (info, success, failure) => {
       // console.log(info, success, failure);
-      upload(info.blob())
+      props.upload(info.blob())
         .then((res) => {
           success(res.data.url);
         })
