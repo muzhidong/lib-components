@@ -10,6 +10,11 @@
 </template>
 
 <script>
+/**
+ * 特点：
+ * 组件化。内容驱动；画布与图片是一对多的关系，不是一对一，减少资源浪费。
+ * 缓存处理。同一图片只生成一次，再次被使用到直接取缓存，缓存有效期取决于小程序是否销毁。
+ */
 const CACHE_NAME = 'canvas2image';
 const IMAGE_TYPE = {
   NORMAL: 'normal',
