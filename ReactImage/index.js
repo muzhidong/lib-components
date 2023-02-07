@@ -3,6 +3,14 @@ import React, {
 } from 'react';
 import styles from './index.less';
 
+/**
+ * 特点：
+ * 图片加载完成显示
+ * 图片基础样式支持扩展
+ * 
+ * 示例：
+ * <Image src={require('./logo.png')} alt={"logo"} className={styles.logo} />
+ */
 export default function(props) {
 
   const {
