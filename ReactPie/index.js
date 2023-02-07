@@ -2,7 +2,24 @@
 import styles from './index.less';
 
 /**
- * 参数说明：两元素数组items，每个元素是一个对象，拥有展示颜色color和占有比例ratio属性
+ * 只支持两种类型数据的动态展示
+ * 
+ * 组件整体设计思路
+ * 1. 比例大的作为主色，比例小的作为次色
+ * 2. 根据较小的比例计算偏移角度
+ * 3. 利用border绘制半圆环，主色半圆环根据算出的偏移角度作旋转 
+ * 
+ * 组件对外暴露属性：
+ * items属性：两元素数组，每个元素是一个具有展示颜色color和占有比例ratio属性的对象。
+ * 
+ * 示例：
+  <Pie items={[{
+      color: '#3DE0B1',
+      ratio: 0.6,
+    },{
+      color: '#4FBCFF',
+      ratio: 0.4,
+    }]}></Pie>
  */
 export default function(props) {
 
