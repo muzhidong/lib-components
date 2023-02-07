@@ -28,6 +28,29 @@ let currentPage = 0;
 // 首次渲染
 let firstRendered = true;
 
+/**
+ * 组件整体设计思路
+ * 1. 计算分页百分比大小（父元素的高度是所有屏幕高度之和）和客户端高度
+ * 2. 监听事件，如阻止触摸事件默认行为，监听客户端高度变化
+ * 3. 定义触摸开始、移动、结束事件
+ * 4. 监听外属性next变化时，切换到下一页
+ * 5. 组件布局，一个容器顶层，主要绑定触摸事件，一个嵌套层，关键点是根据屏数确定高度。
+ * 
+ * 组件对外暴露属性
+ * 1. 分页数pageNum
+ * 2. 触发切换到下一页标识next
+ * 
+ * 示例：
+  <PagingSlidingScreen pageNum={7} next={next}>
+    <div className={styles.page}></div>
+    <div className={styles.page}></div>
+    <div className={styles.page}></div>
+    <div className={styles.page}></div>
+    <div className={styles.page}></div>
+    <div className={styles.page}></div>
+    <div className={styles.page}></div>
+  </PagingSlidingScreen>
+ */
 export default function(props) {
 
   let {
@@ -73,6 +96,7 @@ export default function(props) {
     if (!event.touches.length) {
       return;
     }
+    // 登记y轴起始位置，重置移动偏移量
     startY = event.touches[0].pageY;
     moveY = 0;
   };
@@ -83,8 +107,8 @@ export default function(props) {
     if (!event.touches.length) {
       return;
     }
+    // 计算移动偏移量，并渲染
     moveY = event.touches[0].pageY - startY;
-
     setTranslateY(`translateY(${-currentPage * clientHeight + moveY}px)`);
   };
 
@@ -108,9 +132,8 @@ export default function(props) {
     if (currentPage > pageNum - 1) {
       currentPage = pageNum - 1;
     }
-
+    // 切换分页
     setTranslateY(`translateY(${-currentPage * percent}%)`);
-
   };
 
   return (
