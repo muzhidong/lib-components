@@ -30,6 +30,11 @@
 </template>
 
 <script>
+/**
+ * 特点：
+ * 可循环轮播，聚焦时放大
+ * 支持内容自定义
+ */
 let systemInfo;
 let widthArr;
 let maxOffset;
