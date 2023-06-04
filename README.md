@@ -28,6 +28,9 @@
 ## react-native版
 - 自动聚焦Tab组件ReactNativeTab
 
+## vue版
+- 基于ECharts图表组件VECharts
+
 ## uni版
 ### 交互类
 - 轮播组件uni-swiper
