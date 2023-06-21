@@ -38,9 +38,14 @@ export default {
     scale: {
       type: Number,
       default: 10
+    },
+    // 生成图片分辨率比例
+    pixelRatio: {
+      type: Number,
+      default: 1
     }
   },
-  data() {
+  data () {
     return {
       chart: null,
       imgEl: null,
@@ -48,14 +53,14 @@ export default {
       chartStyle: {}
     }
   },
-  mounted() {
+  mounted () {
     this.init(this.id)
   },
   watch: {
-    id(newValue) {
+    id (newValue) {
       this.init(newValue)
     },
-    source(newValue) {
+    source (newValue) {
       if (!this.chart) return
       this.chart.setOption({
         dataset: {
@@ -64,10 +69,14 @@ export default {
       }, {
         lazyUpdate: this.lazyUpdate
       })
+    },
+    options (newValue) {
+      if (!this.chart) return
+      this.chart.setOption(newValue)
     }
   },
   methods: {
-    init(id) {
+    init (id) {
       if (!this.imgEl) {
         this.imgEl = document.querySelector(`#image${id}`)
       }
@@ -98,7 +107,9 @@ export default {
 
         const self = this
         this.chart.on('finished', function () {
-          self.imgEl.src = self.chart.getDataURL()
+          self.imgEl.src = self.chart.getDataURL({
+            pixelRatio: self.pixelRatio
+          })
           self.imgEl.addEventListener('load', function () {
             self.imgEl.style.display = 'inline-block'
           })
@@ -128,5 +139,6 @@ export default {
   position:fixed;
   top: -9999px;
   left: -9999px;
+  transform: translateZ(0);
 }
 </style>
